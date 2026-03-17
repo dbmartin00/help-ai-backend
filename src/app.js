@@ -15,10 +15,6 @@ const client = factory.client();
 await client.ready();
 console.log('treatment', client.getTreatment('dmartin-ai', 'ai_prompts'));
 
-const smoke = client.getTreatmentWithConfig('dmartin-ai', 'ai_prompts');
-const smokeJson = JSON.parse(smoke.config);
-console.log('smokeJson', smokeJson);
-
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -28,6 +24,10 @@ const DATA_API = process.env.DATA_API;
 
 app.post("/ask", async (req, res) => {
   console.log("/ask called");
+
+  const smoke = client.getTreatmentWithConfig('dmartin-ai', 'ai_prompts');
+  const smokeJson = JSON.parse(smoke.config);
+  console.log('smokeJson', smokeJson);
 
   try {
     const { question } = req.body;
