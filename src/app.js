@@ -2,6 +2,22 @@ import express from "express";
 import fetch from "node-fetch";
 import OpenAI from "openai";
 import cors from "cors";
+import { SplitFactory } from '@splitsoftware/splitio';
+
+const factory = SplitFactory({
+  core: {
+    authorizationKey: '28bddhnjht06lvi8e5aa9rkmv5glsc40ltaa'
+  }
+});
+
+const client = factory.client();
+
+await client.ready();
+console.log('treatment', client.getTreatment('dmartin-ai', 'ai_prompts'));
+
+const smoke = client.getTreatmentWithConfig('dmartin-ai', 'ai_prompts');
+const smokeJson = JSON.parse(smoke.config);
+console.log('smokeJson', smokeJson);
 
 const app = express();
 app.use(express.json());
@@ -29,14 +45,24 @@ app.post("/ask", async (req, res) => {
 
     const dataString = JSON.stringify(aggregated);
 
-    const gptResponse = await openai.chat.completions.create({
-      model: "gpt-4.1-mini",
-      messages: [
-        { role: "system", content: "You are a data analyst assistant. Answer questions about feature flag impressions." },
-        { role: "user", content: `Data: ${dataString}\nQuestion: ${question}` }
-      ],
-      max_completion_tokens: 400
-    });
+//    const gptResponse = await openai.chat.completions.create({
+//      model: "gpt-4.1-mini",
+//      messages: [
+//        { role: "system", content: "You are a data analyst assistant. Answer questions about feature flag impressions." },
+//        { role: "user", content: `Data: ${dataString}\nQuestion: ${question}` }
+//      ],
+//      max_completion_tokens: 400
+//    });
+
+    const result = client.getTreatmentWithConfig('dmartin-ai', 'ai_prompts');
+    const json = JSON.parse(result.config);
+
+    json.messages[1].content =
+      `Data: ${dataString}\nQuestion: ${question}`;
+
+    console.log('json', json);
+
+    const gptResponse = await openai.chat.completions.create(json);
 
     const answer = gptResponse.choices[0].message.content;
     console.log("answer:", answer);

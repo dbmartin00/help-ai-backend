@@ -4,6 +4,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
+    "@harnessio/ff-nodejs-server-sdk": "^1.8.12",
+    "@splitsoftware/splitio": "^11.11.0",
     "accepts": "^2.0.0",
     "body-parser": "^2.2.2",
     "bytes": "^3.1.2",
@@ -79,7 +81,6 @@
     "web-streams-polyfill": "^3.3.3",
     "wrappy": "^1.0.2"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
