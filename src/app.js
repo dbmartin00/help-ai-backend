@@ -60,7 +60,7 @@ app.post("/ask", async (req, res) => {
     json.messages[1].content =
       `Data: ${dataString}\nQuestion: ${question}`;
 
-    console.log('json', json);
+    console.log('final json', json);
 
     const gptResponse = await openai.chat.completions.create(json);
 
