@@ -32,8 +32,13 @@ app.post("/ask", async (req, res) => {
     const { question } = req.body;
 
     console.log("fetching impression data...");
+    const athenaStart = Date.now();
     const response = await fetch(DATA_API);
     const data = await response.json();
+    const athenaLatencyMs = Date.now() - athenaStart;
+
+    client.track('dmartin-ai', 'user', 'athena_latency', athenaLatencyMs);
+    console.log(`Athena latency: ${athenaLatencyMs}ms`);
 
     const aggregated = data.reduce((acc, item) => {
       const { splitName, impression_date, impression_count } = item;
@@ -61,7 +66,13 @@ app.post("/ask", async (req, res) => {
 
     console.log('final json', json);
 
+    const startTime = Date.now();
     const gptResponse = await openai.chat.completions.create(json);
+    const latencyMs = Date.now() - startTime;
+
+    const properties = { model: json.model, treatment: result.treatment };
+    client.track('dmartin-ai', 'user', 'openai_latency', latencyMs, properties);
+    console.log(`OpenAI latency: ${latencyMs}ms`);
 
     const answer = gptResponse.choices[0].message.content;
     console.log("answer:", answer);
