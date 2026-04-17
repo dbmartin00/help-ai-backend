@@ -5,7 +5,7 @@ import { SplitFactory } from '@splitsoftware/splitio';
 
 const factory = SplitFactory({
   core: {
-    authorizationKey: '28bddhnjht06lvi8e5aa9rkmv5glsc40ltaa'
+    authorizationKey: process.env.SPLIT_AUTHORIZATION_KEY
   }
 });
 
