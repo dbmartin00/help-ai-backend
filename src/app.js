@@ -12,7 +12,7 @@ const factory = SplitFactory({
     eventsPushRate: 5
   },
   sync: {
-    impressionsMode: DEBUG
+    impressionsMode: 'DEBUG'
   }
 });
 
