@@ -6,6 +6,13 @@ import { SplitFactory } from '@splitsoftware/splitio';
 const factory = SplitFactory({
   core: {
     authorizationKey: process.env.SPLIT_AUTHORIZATION_KEY
+  },
+  scheduler: {
+    impressionsRefreshRate: 5,
+    eventsPushRate: 5
+  },
+  sync: {
+    impressionsMode: DEBUG
   }
 });
 
